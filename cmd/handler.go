@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/vault-agent-token-handler/handler"
+	"github.com/spf13/viper"
 )
 
 var handlerCmd = &cobra.Command{
@@ -16,4 +17,5 @@ var handlerCmd = &cobra.Command{
 
 func init() {
 	RootCmd.AddCommand(handlerCmd)
+	viper.SetDefault("vault-insecure", false)
 }

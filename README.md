@@ -19,4 +19,5 @@ Use "vault-agent-token-handler [command] --help" for more information about a co
 ```
 # Reference
 
+* https://github.com/openlab-red/hashicorp-vault-for-openshift
 * https://github.com/raffaelespazzoli/credscontroller

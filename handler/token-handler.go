@@ -76,11 +76,11 @@ func (h tokenHandler) readToken() {
 	ahWrapping := true
 	switch {
 	case swi.TTL != 10:
-		log.Errorln("bad wrap info: %v", swi.TTL)
+		log.Errorln("bad wrap info: ", swi.TTL)
 	case !ahWrapping && swi.CreationPath != "sys/wrapping/wrap":
-		log.Errorln("bad wrap path: %v", swi.CreationPath)
-	case ahWrapping && swi.CreationPath != "auth/jwt/login":
-		log.Errorln("bad wrap path: %v", swi.CreationPath)
+		log.Errorln("bad wrap path:", swi.CreationPath)
+	case ahWrapping && swi.CreationPath != "auth/kubernetes/login":
+		log.Errorln("bad wrap path:", swi.CreationPath)
 	case swi.Token == "":
 		log.Errorln("wrap token is empty")
 	}
@@ -113,12 +113,13 @@ func (h tokenHandler) readToken() {
 		log.Debugln("Using token: ", clientToken)
 		log.Debugln("Retrieving secret: ", retrieveSecret)
 		client.SetToken(swi.Token)
-		secret, err := client.Logical().Read(retrieveSecret)
+		//secret, err := client.Logical().Read(retrieveSecret)
+		secret, err := client.Auth().Token().LookupSelf()
 		if err != nil {
 			log.Warnln(err)
 			return
 		}
-		log.Debugln("Executed secret request", client.Address(), retrieveSecret)
+		//log.Debugln("Executed secret request", client.Address(), retrieveSecret)
 		f, err := os.Create(propertiesFile)
 		if err != nil {
 			log.Warnln(err)

@@ -72,8 +72,16 @@ func (h tokenHandler) readToken() {
 		return
 	}
 
+	client.SetToken(swi.Token)
+
+	secret, err := client.Logical().Unwrap("")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
 	if retrieveSecret != "" {
-		log.Debugln("Using token: ", swi.Token)
+		log.Debugln("Using token: ", secret)
 		log.Debugln("Retrieving secret: ", retrieveSecret)
 		client.SetToken(swi.Token)
 		secret, err := client.Logical().Read(retrieveSecret)

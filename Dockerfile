@@ -13,7 +13,7 @@ COPY . ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /app .
 
-FROM scratch
+FROM registry.access.redhat.com/rhel7-atomic:latest
 
 COPY --from=builder /app ./
 

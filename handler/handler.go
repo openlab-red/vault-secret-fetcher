@@ -20,8 +20,8 @@ func initLog() {
 }
 
 func validateConfig() {
-	if viper.GetString("vault-cacert") == "" {
-		log.Fatalln("vault-cacert must be set and non-empty")
+	if viper.GetString("vault-capath") == "" {
+		log.Fatalln("vault-capath must be set and non-empty")
 	}
 	if viper.GetString("vault-addr") == "" {
 		log.Fatalln("vault-addr must be set and non-empty")

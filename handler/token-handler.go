@@ -8,6 +8,7 @@ import (
 	"os"
 	"github.com/sirupsen/logrus"
 	"github.com/micro/go-config/encoder/yaml"
+	"strconv"
 )
 
 type tokenHandler struct {
@@ -17,12 +18,13 @@ type tokenHandler struct {
 func (h tokenHandler) createAPIClient() (*api.Client, error) {
 	//creates the vault config
 	log.Debugln("Creating vault config")
+	insecure, _ := strconv.ParseBool(viper.GetString("vault-insecure"))
 	vConfig := api.Config{
 		Address: viper.GetString("vault-addr"),
 	}
 	tlsConfig := api.TLSConfig{
-		CACert:   viper.GetString("vault-cacert"),
-		Insecure: true,
+		CAPath:   viper.GetString("vault-capath"),
+		Insecure:  insecure,
 	}
 	err := vConfig.ConfigureTLS(&tlsConfig)
 	if err != nil {

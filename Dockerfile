@@ -13,8 +13,18 @@ COPY . ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /app .
 
-FROM scratch
+FROM registry.access.redhat.com/rhel7-atomic:latest
 
-COPY --from=builder /app ./
+ENV HOME=/home/token-handler
+RUN mkdir -p $HOME
+
+COPY --from=builder /app $HOME
+
+RUN chown -R 1001:0 $HOME && \
+    chmod -R g+rw $HOME
+
+WORKDIR $HOME
+
+USER 1001
 
 ENTRYPOINT ["./app"]

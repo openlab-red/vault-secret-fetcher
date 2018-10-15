@@ -24,7 +24,7 @@ func (h tokenHandler) createAPIClient() (*api.Client, error) {
 	}
 	tlsConfig := api.TLSConfig{
 		CAPath:   viper.GetString("vault-capath"),
-		Insecure:  insecure,
+		Insecure: insecure,
 	}
 	err := vConfig.ConfigureTLS(&tlsConfig)
 	if err != nil {
@@ -72,16 +72,45 @@ func (h tokenHandler) readToken() {
 		return
 	}
 
+	// Now unwrap it
+	ahWrapping := true
+	switch {
+	case swi.TTL != 10:
+		log.Errorln("bad wrap info: %v", swi.TTL)
+	case !ahWrapping && swi.CreationPath != "sys/wrapping/wrap":
+		log.Errorln("bad wrap path: %v", swi.CreationPath)
+	case ahWrapping && swi.CreationPath != "auth/jwt/login":
+		log.Errorln("bad wrap path: %v", swi.CreationPath)
+	case swi.Token == "":
+		log.Errorln("wrap token is empty")
+	}
 	client.SetToken(swi.Token)
-
 	secret, err := client.Logical().Unwrap("")
 	if err != nil {
-		log.Println(err)
-		return
+		log.Errorln(err)
+	}
+	var clientToken string
+
+	if ahWrapping {
+		switch {
+		case secret.Auth == nil:
+			log.Errorln("unwrap secret auth is nil")
+		case secret.Auth.ClientToken == "":
+			log.Errorln("unwrap token is nil")
+		}
+		clientToken = secret.Auth.ClientToken
+	} else {
+		switch {
+		case secret.Data == nil:
+			log.Errorln("unwrap secret data is nil")
+		case secret.Data["token"] == nil:
+			log.Errorln("unwrap token is nil")
+		}
+		clientToken = secret.Data["token"].(string)
 	}
 
 	if retrieveSecret != "" {
-		log.Debugln("Using token: ", secret)
+		log.Debugln("Using token: ", clientToken)
 		log.Debugln("Retrieving secret: ", retrieveSecret)
 		client.SetToken(swi.Token)
 		secret, err := client.Logical().Read(retrieveSecret)
@@ -97,7 +126,7 @@ func (h tokenHandler) readToken() {
 		}
 		defer f.Close()
 		//err = json.NewEncoder(f).Encode(&secret.Data)
-		content , err := yaml.NewEncoder().Encode(&secret.Data)
+		content, err := yaml.NewEncoder().Encode(&secret.Data)
 		f.Write(content)
 		log.Infoln("Wrote secret: ", propertiesFile)
 	}

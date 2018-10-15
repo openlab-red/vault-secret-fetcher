@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"github.com/hashicorp/vault/api"
 	"github.com/spf13/viper"
 	"io/ioutil"
@@ -49,7 +48,6 @@ func (h tokenHandler) readToken() {
 	propertiesFile := viper.GetString("properties-file")
 	vaultToken := viper.GetString("vault-token")
 	retrieveSecret := viper.GetString("retrieve-secret")
-	var swi api.SecretWrapInfo
 
 	if err := os.Remove(propertiesFile); err != nil {
 		log.WithFields(logrus.Fields{
@@ -60,59 +58,17 @@ func (h tokenHandler) readToken() {
 	data, err := ioutil.ReadFile(vaultToken)
 	check(err)
 
-	err = json.Unmarshal(data, &swi)
-	if err != nil {
-		log.Warnln(err)
-		return
-	}
-
+	clientToken := string(data)
 	client, err := h.createAPIClient()
 	if err != nil {
 		log.Warnln(err)
 		return
 	}
 
-	// Now unwrap it
-	ahWrapping := true
-	switch {
-	case swi.TTL != 10:
-		log.Errorln("bad wrap info: ", swi.TTL)
-	case !ahWrapping && swi.CreationPath != "sys/wrapping/wrap":
-		log.Errorln("bad wrap path:", swi.CreationPath)
-	case ahWrapping && swi.CreationPath != "auth/kubernetes/login":
-		log.Errorln("bad wrap path:", swi.CreationPath)
-	case swi.Token == "":
-		log.Errorln("wrap token is empty")
-	}
-	client.SetToken(swi.Token)
-	secret, err := client.Logical().Unwrap("")
-	if err != nil {
-		log.Errorln(err)
-	}
-	var clientToken string
-
-	if ahWrapping {
-		switch {
-		case secret.Auth == nil:
-			log.Errorln("unwrap secret auth is nil")
-		case secret.Auth.ClientToken == "":
-			log.Errorln("unwrap token is nil")
-		}
-		clientToken = secret.Auth.ClientToken
-	} else {
-		switch {
-		case secret.Data == nil:
-			log.Errorln("unwrap secret data is nil")
-		case secret.Data["token"] == nil:
-			log.Errorln("unwrap token is nil")
-		}
-		clientToken = secret.Data["token"].(string)
-	}
-
 	if retrieveSecret != "" {
 		log.Debugln("Using token: ", clientToken)
 		log.Debugln("Retrieving secret: ", retrieveSecret)
-		client.SetToken(swi.Token)
+		client.SetToken(clientToken)
 		//secret, err := client.Logical().Read(retrieveSecret)
 		secret, err := client.Auth().Token().LookupSelf()
 		if err != nil {

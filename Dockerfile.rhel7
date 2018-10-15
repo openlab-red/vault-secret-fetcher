@@ -13,7 +13,7 @@ COPY . ./
 
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix nocgo -o /app .
 
-FROM fedora:28
+FROM registry.access.redhat.com/rhel7-atomic:latest
 
 ENV HOME=/home/token-handler
 RUN mkdir -p $HOME

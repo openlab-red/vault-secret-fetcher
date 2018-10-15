@@ -36,6 +36,7 @@ func Start() {
 	validateConfig()
 
 	tokenHandler := tokenHandler{viper.GetString("vault-addr")}
+	tokenHandler.readToken()
 	newWatcher(tokenHandler)
 }
 
@@ -56,7 +57,7 @@ func newWatcher(tokenHandler tokenHandler) {
 			select {
 			// watch for events
 			case event := <-watcher.Events:
-				log.Info("EVENT! %#v\n", event)
+				log.Infoln(event)
 				tokenHandler.readToken()
 				// watch for errors
 			case err := <-watcher.Errors:

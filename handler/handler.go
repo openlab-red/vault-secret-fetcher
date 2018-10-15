@@ -4,7 +4,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/fsnotify/fsnotify"
-	"fmt"
 )
 
 var log = logrus.New()
@@ -44,7 +43,7 @@ func newWatcher(tokenHandler tokenHandler) {
 	// creates a new file watcher
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		fmt.Println("ERROR", err)
+		log.Errorln(err)
 	}
 	defer watcher.Close()
 

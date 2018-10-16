@@ -69,13 +69,11 @@ func (h tokenHandler) readToken() {
 		log.Debugln("Using token: ", clientToken)
 		log.Debugln("Retrieving secret: ", retrieveSecret)
 		client.SetToken(clientToken)
-		//secret, err := client.Logical().Read(retrieveSecret)
-		secret, err := client.Auth().Token().LookupSelf()
+		secret, err := client.Logical().Read(retrieveSecret)
 		if err != nil {
 			log.Warnln(err)
 			return
 		}
-		//log.Debugln("Executed secret request", client.Address(), retrieveSecret)
 		f, err := os.Create(propertiesFile)
 		if err != nil {
 			log.Warnln(err)

@@ -175,6 +175,14 @@
   revision = "1f6e18d34f6790fc0afea6f13a5fe3d9ab1770af"
 
 [[projects]]
+  digest = "1:ed615c5430ecabbb0fb7629a182da65ecee6523900ac1ac932520860878ffcad"
+  name = "github.com/robfig/cron"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "b41be1df696709bb6395fe435af20370037c0b4c"
+  version = "v1.1"
+
+[[projects]]
   branch = "master"
   digest = "1:5b92d232e81c3e8eec282c92dcaa2e0e1ad3c23157be19a01b3e33f7e6e8d137"
   name = "github.com/ryanuber/go-glob"
@@ -319,6 +327,7 @@
     "github.com/fsnotify/fsnotify",
     "github.com/hashicorp/vault/api",
     "github.com/micro/go-config/encoder/yaml",
+    "github.com/robfig/cron",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",

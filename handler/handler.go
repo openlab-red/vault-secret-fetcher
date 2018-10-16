@@ -4,6 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/fsnotify/fsnotify"
+	"github.com/robfig/cron"
 )
 
 var log = logrus.New()
@@ -35,6 +36,8 @@ func Start() {
 	validateConfig()
 
 	tokenHandler := tokenHandler{viper.GetString("vault-addr")}
+	c := cron.New()
+	c.AddFunc("0 1 * * * *", func() { tokenHandler.readToken() })
 	tokenHandler.readToken()
 	newWatcher(tokenHandler)
 }

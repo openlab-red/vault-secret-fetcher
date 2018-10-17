@@ -47,7 +47,7 @@ func (h tokenHandler) createAPIClient() (*api.Client, error) {
 func (h tokenHandler) readToken() {
 	propertiesFile := viper.GetString("properties-file")
 	vaultToken := viper.GetString("vault-token")
-	retrieveSecret := viper.GetString("retrieve-secret")
+	retrieveSecret := viper.GetString("vault-secret")
 
 	if err := os.Remove(propertiesFile); err != nil {
 		log.WithFields(logrus.Fields{

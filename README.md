@@ -17,6 +17,20 @@ Flags:
 Use "vault-agent-token-handler [command] --help" for more information about a command.
 
 ```
+
+## Environment variable
+
+|     NAME                    |  DEFAULT    |
+|-----------------------------|-------------|
+| LOG_LEVEL                   |    INFO     |
+| VAULT_ADDR                  |             |
+| VAULT_CAPATH                |             |
+| VAULT_TOKEN                 |             |
+| VAULT_SECRET                |             |
+| PROPERTIES_FILE             |             |
+| VAULT_INSECURE              |    false    |
+| VAULT_TOKEN_HANDLER_CRON    | 1 * * * * * |
+
 # Reference
 
 * https://github.com/openlab-red/hashicorp-vault-for-openshift

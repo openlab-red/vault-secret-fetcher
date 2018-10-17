@@ -20,13 +20,17 @@ func initLog() {
 }
 
 func validateConfig() {
-	if viper.GetString("vault-capath") == "" {
-		log.Fatalln("vault-capath must be set and non-empty")
+
+	env := []string{"vault-capath", "vault-addr", "vault-token", "vault-secret", "properties-file"}
+
+	for _, value := range env {
+		if viper.GetString(value) == "" {
+			log.WithFields(logrus.Fields{
+				"environment": value,
+			}).Fatalln("Must be set and non-empty")
+		}
 	}
-	if viper.GetString("vault-addr") == "" {
-		log.Fatalln("vault-addr must be set and non-empty")
-	}
-	log.Debugln("configuration is valid")
+	log.Debugln("Configuration is valid")
 }
 
 func Start() {

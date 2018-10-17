@@ -37,7 +37,8 @@ func Start() {
 
 	tokenHandler := tokenHandler{viper.GetString("vault-addr")}
 	c := cron.New()
-	c.AddFunc("0 1 * * * *", func() { tokenHandler.readToken() })
+	c.AddFunc(viper.GetString("vault-token-handler-cron"), func() { tokenHandler.readToken() })
+	c.Start()
 	tokenHandler.readToken()
 	newWatcher(tokenHandler)
 }

@@ -18,4 +18,5 @@ var handlerCmd = &cobra.Command{
 func init() {
 	RootCmd.AddCommand(handlerCmd)
 	viper.SetDefault("vault-insecure", false)
+	viper.SetDefault("vault-token-handler-cron", "1 * * * * *")
 }

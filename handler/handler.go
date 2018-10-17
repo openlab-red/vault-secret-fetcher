@@ -36,11 +36,15 @@ func Start() {
 	validateConfig()
 
 	tokenHandler := tokenHandler{viper.GetString("vault-addr")}
+	newCron(tokenHandler)
+	newWatcher(tokenHandler)
+}
+
+func newCron(tokenHandler tokenHandler) {
 	c := cron.New()
 	c.AddFunc(viper.GetString("vault-token-handler-cron"), func() { tokenHandler.readToken() })
 	c.Start()
 	tokenHandler.readToken()
-	newWatcher(tokenHandler)
 }
 
 func newWatcher(tokenHandler tokenHandler) {

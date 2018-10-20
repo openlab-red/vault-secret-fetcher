@@ -130,10 +130,11 @@
   version = "v1.8.0"
 
 [[projects]]
-  digest = "1:5110138f2767cba7c63eb8c03a02a3e73ccee297afabe3bcada363b5dc9df49e"
+  digest = "1:9a4e973ddc9676312dcffb39913f52813395dfe0f631465a6c257d40f5bae8bb"
   name = "github.com/micro/go-config"
   packages = [
     "encoder",
+    "encoder/json",
     "encoder/yaml",
   ]
   pruneopts = "UT"
@@ -326,6 +327,7 @@
   input-imports = [
     "github.com/fsnotify/fsnotify",
     "github.com/hashicorp/vault/api",
+    "github.com/micro/go-config/encoder/json",
     "github.com/micro/go-config/encoder/yaml",
     "github.com/robfig/cron",
     "github.com/sirupsen/logrus",

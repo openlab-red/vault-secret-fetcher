@@ -7,6 +7,7 @@ import (
 	"os"
 	"github.com/sirupsen/logrus"
 	"github.com/micro/go-config/encoder/yaml"
+	"github.com/micro/go-config/encoder/json"
 	"strconv"
 )
 
@@ -48,6 +49,7 @@ func (h tokenHandler) readToken() {
 	propertiesFile := viper.GetString("properties-file")
 	vaultToken := viper.GetString("vault-token")
 	retrieveSecret := viper.GetString("vault-secret")
+	propertiesType := viper.GetString("properties-type")
 
 	if err := os.Remove(propertiesFile); err != nil {
 		log.WithFields(logrus.Fields{
@@ -80,8 +82,15 @@ func (h tokenHandler) readToken() {
 			return
 		}
 		defer f.Close()
-		//err = json.NewEncoder(f).Encode(&secret.Data)
-		content, err := yaml.NewEncoder().Encode(&secret.Data)
+
+		var content [] byte
+
+		if propertiesType == "yam" {
+			content, err = yaml.NewEncoder().Encode(&secret.Data)
+		} else {
+			content, err = json.NewEncoder().Encode(&secret.Data)
+		}
+		check(err)
 		f.Write(content)
 		log.Infoln("Wrote secret: ", propertiesFile)
 	}

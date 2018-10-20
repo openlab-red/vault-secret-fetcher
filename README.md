@@ -30,7 +30,7 @@ Use "vault-agent-token-handler [command] --help" for more information about a co
 | VAULT_INSECURE              |    false    |    TLS Skip                                                     |
 | VAULT_TOKEN_HANDLER_CRON    | 1 * * * * * |    Cron Scheduler for the token handler                         |
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
-
+| PROPERTIES_TYPE             |     yaml    |    Properties output format                                     |
 
 # Reference
 

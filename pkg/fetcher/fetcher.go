@@ -1,4 +1,4 @@
-package handler
+package fetcher
 
 import (
 	"github.com/sirupsen/logrus"
@@ -35,7 +35,7 @@ func validateConfig() {
 
 func Start() {
 	initLog()
-	log.Infoln("Starting token handler...")
+	log.Infoln("Starting token fetcher...")
 
 	validateConfig()
 
@@ -46,7 +46,7 @@ func Start() {
 
 func newCron(tokenHandler tokenHandler) {
 	c := cron.New()
-	c.AddFunc(viper.GetString("vault-token-handler-cron"), func() { tokenHandler.readToken() })
+	c.AddFunc(viper.GetString("vault-token-fetcher-cron"), func() { tokenHandler.readToken() })
 	c.Start()
 	tokenHandler.readToken()
 }

@@ -1,20 +1,20 @@
-# Hashicorp Vault Agent Token Handler
+# Hashicorp Vault Secret Fetcher
 
 
 ```
-Vault Agent Token Handler sidecar container for kubernetes applications
+Vault Secret Fetcher sidecar container for kubernetes applications
 
 Usage:
-  vault-agent-token-handler [command]
+  vault-secret-fetcher [command]
 
 Available Commands:
-  handler     handler retrieves credentials managed by the vault agent
-  help        Help about any command
+  start     start retrieves credentials managed by the vault agent
+  help      Help about any command
 
 Flags:
-  -h, --help   help for vault-agent-token-handler
+  -h, --help   help for vault-secret-fetcher
 
-Use "vault-agent-token-handler [command] --help" for more information about a command.
+Use "vault-secret-fetcher [command] --help" for more information about a command.
 
 ```
 
@@ -28,7 +28,7 @@ Use "vault-agent-token-handler [command] --help" for more information about a co
 | VAULT_TOKEN                 |             |    Vault Agent sink file path                                   |
 | VAULT_SECRET                |             |    Vault Secret to retrieve                                     |
 | VAULT_INSECURE              |    false    |    TLS Skip                                                     |
-| VAULT_TOKEN_HANDLER_CRON    | 1 * * * * * |    Cron Scheduler for the token handler                         |
+| VAULT_SECRET_FETCHER_CRON   | 1 * * * * * |    Cron Scheduler for the secret fetcher                        |
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
 | PROPERTIES_TYPE             |     yaml    |    Properties output format                                     |
 
@@ -39,13 +39,13 @@ Use "vault-agent-token-handler [command] --help" for more information about a co
     ```
     oc project openshift
 
-    oc new-build --name vault-agent-token-handler https://github.com/openlab-red/vault-agent-token-handler
+    oc new-build --name vault-secret-fetcher https://github.com/openlab-red/vault-secret-fetcher
     ```
 
 2. Check the Image Stream.
 
     ```
-    oc get is vault-agent-token-handler
+    oc get is vault-secret-fetcher
     ```
 
 # Reference

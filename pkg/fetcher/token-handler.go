@@ -1,4 +1,4 @@
-package handler
+package fetcher
 
 import (
 	"github.com/hashicorp/vault/api"

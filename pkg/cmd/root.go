@@ -11,7 +11,7 @@ import (
 var cfgFile string
 
 var RootCmd = &cobra.Command{
-	Use:   "vault-token-handler",
+	Use:   "vault-token-fetcher",
 	Short: "Vault Token Handler sidecar container for kubernetes applications",
 	Long:  "Vault Token Handler sidecar container for kubernetes applications",
 }

@@ -3,7 +3,7 @@ FROM golang:1.11 AS builder
 ADD https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 /usr/bin/dep
 RUN chmod +x /usr/bin/dep
 
-WORKDIR $GOPATH/src/github.com/vault-agent-token-handler
+WORKDIR $GOPATH/src/github.com/openlab-red/vault-secret-fetcher
 
 COPY Gopkg.toml Gopkg.lock ./
 

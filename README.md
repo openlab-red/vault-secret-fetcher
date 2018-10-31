@@ -32,6 +32,22 @@ Use "vault-agent-token-handler [command] --help" for more information about a co
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
 
 
+## Make images available in OpenShift
+
+1. Build
+
+    ```
+    oc project openshift
+
+    oc new-build --name vault-agent-token-handler https://github.com/openlab-red/vault-agent-token-handler
+    ```
+
+2. Check the Image Stream.
+
+    ```
+    oc get is vault-agent-token-handler
+    ```
+
 # Reference
 
 * https://github.com/openlab-red/hashicorp-vault-for-openshift

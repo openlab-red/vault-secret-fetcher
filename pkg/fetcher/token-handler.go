@@ -9,6 +9,7 @@ import (
 	"github.com/micro/go-config/encoder/yaml"
 	"github.com/micro/go-config/encoder/json"
 	"strconv"
+	"path/filepath"
 )
 
 type tokenHandler struct {
@@ -49,7 +50,6 @@ func (h tokenHandler) readToken() {
 	propertiesFile := viper.GetString("properties-file")
 	vaultToken := viper.GetString("vault-token")
 	retrieveSecret := viper.GetString("vault-secret")
-	propertiesType := viper.GetString("properties-type")
 
 	if err := os.Remove(propertiesFile); err != nil {
 		log.WithFields(logrus.Fields{
@@ -85,11 +85,15 @@ func (h tokenHandler) readToken() {
 
 		var content [] byte
 
-		if propertiesType == "yam" {
+		switch    ext := filepath.Ext(propertiesFile); ext {
+		case "yaml":
 			content, err = yaml.NewEncoder().Encode(&secret.Data)
-		} else {
+		case "json":
 			content, err = json.NewEncoder().Encode(&secret.Data)
+		default:
+			log.Fatalln("Type %s not supported", ext)
 		}
+
 		check(err)
 		f.Write(content)
 		log.Infoln("Wrote secret: ", propertiesFile)

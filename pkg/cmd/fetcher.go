@@ -20,5 +20,4 @@ func init() {
 	viper.SetDefault("log-level", "INFO")
 	viper.SetDefault("vault-insecure", false)
 	viper.SetDefault("vault-token-fetcher-cron", "1 * * * * *")
-	viper.SetDefault("properties-type", "yaml")
 }

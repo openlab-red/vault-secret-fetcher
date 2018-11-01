@@ -30,7 +30,6 @@ Use "vault-secret-fetcher [command] --help" for more information about a command
 | VAULT_INSECURE              |    false    |    TLS Skip                                                     |
 | VAULT_SECRET_FETCHER_CRON   | 1 * * * * * |    Cron Scheduler for the secret fetcher                        |
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
-| PROPERTIES_TYPE             |     yaml    |    Properties output format                                     |
 
 ## Make vault-secret-fetcher image available in OpenShift
 

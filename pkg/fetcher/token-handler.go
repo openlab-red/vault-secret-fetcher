@@ -86,9 +86,9 @@ func (h tokenHandler) readToken() {
 		var content [] byte
 
 		switch    ext := filepath.Ext(propertiesFile); ext {
-		case "yaml":
+		case ".yaml":
 			content, err = yaml.NewEncoder().Encode(&secret.Data)
-		case "json":
+		case ".json":
 			content, err = json.NewEncoder().Encode(&secret.Data)
 		default:
 			log.Fatalln("Type %s not supported", ext)

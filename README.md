@@ -32,7 +32,7 @@ Use "vault-secret-fetcher [command] --help" for more information about a command
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
 | PROPERTIES_TYPE             |     yaml    |    Properties output format                                     |
 
-## Make images available in OpenShift
+## Make vault-secret-fetcher image available in OpenShift
 
 1. Build
 

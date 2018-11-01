@@ -85,7 +85,7 @@ func (h tokenHandler) readToken() {
 
 		var content [] byte
 
-		switch    ext := filepath.Ext(propertiesFile); ext {
+		switch ext := filepath.Ext(propertiesFile); ext {
 		case ".yaml":
 			content, err = yaml.NewEncoder().Encode(&secret.Data)
 		case ".json":

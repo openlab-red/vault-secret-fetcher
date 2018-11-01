@@ -1,4 +1,5 @@
 FROM golang:1.11 AS builder
+LABEL authors="Mattia Mascia <mmascia@redhat.com>" 
 
 ADD https://github.com/golang/dep/releases/download/v0.5.0/dep-linux-amd64 /usr/bin/dep
 RUN chmod +x /usr/bin/dep

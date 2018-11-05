@@ -10,14 +10,6 @@
   version = "v1.4.7"
 
 [[projects]]
-  digest = "1:2cd7915ab26ede7d95b8749e6b1f933f1c6d5398030684e6505940a10f31cfda"
-  name = "github.com/ghodss/yaml"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
-  version = "v1.0.0"
-
-[[projects]]
   branch = "master"
   digest = "1:4a0c6bb4805508a6287675fac876be2ac1182539ca8a32468d8128882e9d5009"
   name = "github.com/golang/snappy"
@@ -128,18 +120,6 @@
   pruneopts = "UT"
   revision = "c2353362d570a7bfa228149c62842019201cfb71"
   version = "v1.8.0"
-
-[[projects]]
-  digest = "1:9a4e973ddc9676312dcffb39913f52813395dfe0f631465a6c257d40f5bae8bb"
-  name = "github.com/micro/go-config"
-  packages = [
-    "encoder",
-    "encoder/json",
-    "encoder/yaml",
-  ]
-  pruneopts = "UT"
-  revision = "5257420bbbf11e151d5a44f031cc26fee3b12963"
-  version = "v0.9.0"
 
 [[projects]]
   digest = "1:78bbb1ba5b7c3f2ed0ea1eab57bdd3859aec7e177811563edc41198a760b06af"
@@ -327,12 +307,11 @@
   input-imports = [
     "github.com/fsnotify/fsnotify",
     "github.com/hashicorp/vault/api",
-    "github.com/micro/go-config/encoder/json",
-    "github.com/micro/go-config/encoder/yaml",
     "github.com/robfig/cron",
     "github.com/sirupsen/logrus",
     "github.com/spf13/cobra",
     "github.com/spf13/viper",
+    "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

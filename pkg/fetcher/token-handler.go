@@ -6,17 +6,11 @@ import (
 	"io/ioutil"
 	"os"
 	"github.com/sirupsen/logrus"
-	"github.com/micro/go-config/encoder/yaml"
-	"github.com/micro/go-config/encoder/json"
 	"strconv"
-	"path/filepath"
+	"strings"
 )
 
-type tokenHandler struct {
-	vaultAddr string
-}
-
-func (h tokenHandler) createAPIClient() (*api.Client, error) {
+func (h TokenHandler) createAPIClient() (*api.Client, error) {
 	//creates the vault config
 	log.Debugln("Creating vault config")
 	insecure, _ := strconv.ParseBool(viper.GetString("vault-insecure"))
@@ -41,69 +35,54 @@ func (h tokenHandler) createAPIClient() (*api.Client, error) {
 		log.Warnln(err)
 		return client, err
 	}
-	client.SetAddress(h.vaultAddr)
+	client.SetAddress(h.VaultAddr)
 	log.Debugln("Created vault client")
 	return client, err
 }
 
-func (h tokenHandler) readToken() {
-	propertiesFile := viper.GetString("properties-file")
-	vaultToken := viper.GetString("vault-token")
-	retrieveSecret := viper.GetString("vault-secret")
+func (h TokenHandler) readToken() {
 
-	if err := os.Remove(propertiesFile); err != nil {
+	if err := os.Remove(h.Properties.Path); err != nil {
 		log.WithFields(logrus.Fields{
-			"propertiesFile": propertiesFile,
+			"Properties Path": h.Properties.Path,
 		}).Warn(err)
 	}
 
-	data, err := ioutil.ReadFile(vaultToken)
+	data, err := ioutil.ReadFile(h.Token)
 	check(err)
 
 	clientToken := string(data)
 	client, err := h.createAPIClient()
-	if err != nil {
-		log.Warnln(err)
-		return
-	}
+	check(err)
 
-	if retrieveSecret != "" {
-		log.Debugln("Using token: ", clientToken)
-		log.Debugln("Retrieving secret: ", retrieveSecret)
-		client.SetToken(clientToken)
-		secret, err := client.Logical().Read(retrieveSecret)
-		if err != nil {
-			log.Warnln(err)
-			return
-		}
-		f, err := os.Create(propertiesFile)
-		if err != nil {
-			log.Warnln(err)
-			return
-		}
-		defer f.Close()
+	err = h.Properties.create()
+	check(err)
 
-		var content [] byte
+	secrets := strings.Split(viper.GetString("vault-secret"), ",")
+	log.Debugln("List secrets", secrets)
 
-		switch ext := filepath.Ext(propertiesFile); ext {
-		case ".yaml":
-			content, err = yaml.NewEncoder().Encode(&secret.Data)
-		case ".json":
-			content, err = json.NewEncoder().Encode(&secret.Data)
-		default:
-			log.Fatalln("Type %s not supported", ext)
+	for _, secret := range secrets {
+		secret := Secret{
+			Name:   secret,
+			Token:  clientToken,
+			Client: client,
 		}
 
+		err = secret.retrieve()
 		check(err)
-		f.Write(content)
-		log.Infoln("Wrote secret: ", propertiesFile)
-	}
 
+		log.Debugln(secret.VaultSecret.Data)
+
+		err = h.Properties.save(secret)
+		check(err)
+
+	}
+	log.Infoln("Wrote secret: ", h.Properties.Path)
+	h.Properties.close()
 }
 
 func check(e error) {
 	if e != nil {
-		log.Error(e)
-		panic(e)
+		log.Fatalln(e)
 	}
 }

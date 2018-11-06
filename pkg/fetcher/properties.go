@@ -15,6 +15,7 @@ func (p *Properties) create() (err error) {
 func (p *Properties) save(secret Secret) (err error) {
 
 	log.Debugln("Saving it on ", p.File.Name())
+
 	data := convPathToMap(secret.Name, secret.VaultSecret.Data)
 	log.Debugf("Map %v", data)
 
@@ -35,14 +36,13 @@ func (p *Properties) close() {
 }
 
 func convPathToMap(secret string, content map[string]interface{}) (map[string]interface{}) {
-	var data map[string]interface{}
-	paths := strings.Split(secret, "/")
-	var prev string
-	var parent map[string]interface{}
+	data := make(map[string]interface{})
 
 	if secret != "" {
-		for i := 0; i < len(paths); i++ {
-			key := paths[i]
+		paths := strings.Split(secret, "/")
+		var prev string
+		var parent map[string]interface{}
+		for _, key := range paths {
 			tmp := createMap(key, content)
 			if len(prev) == 0 {
 				data = tmp

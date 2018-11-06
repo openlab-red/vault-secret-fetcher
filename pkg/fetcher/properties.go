@@ -4,6 +4,7 @@ import (
 	"os"
 	"gopkg.in/yaml.v2"
 	"encoding/json"
+	"strings"
 )
 
 func (p *Properties) create() (err error) {
@@ -14,9 +15,8 @@ func (p *Properties) create() (err error) {
 func (p *Properties) save(secret Secret) (err error) {
 
 	log.Debugln("Saving it on ", p.File.Name())
-
-	data := make(map[string]interface{})
-	data[secret.Name] = secret.VaultSecret.Data
+	data := convPathToMap(secret.Name, secret.VaultSecret.Data)
+	log.Debugf("Map %v", data)
 
 	switch p.Format {
 	case ".yaml":
@@ -24,7 +24,7 @@ func (p *Properties) save(secret Secret) (err error) {
 	case ".json":
 		err = json.NewEncoder(p.File).Encode(&data)
 	default:
-		log.Fatalln("Type %s not supported", p.Format)
+		log.Fatalf("Type %s not supported", p.Format)
 	}
 
 	return
@@ -32,4 +32,34 @@ func (p *Properties) save(secret Secret) (err error) {
 
 func (p *Properties) close() {
 	defer p.File.Close()
+}
+
+func convPathToMap(secret string, content map[string]interface{}) (map[string]interface{}) {
+	var data map[string]interface{}
+	paths := strings.Split(secret, "/")
+	var prev string
+	var parent map[string]interface{}
+
+	if secret != "" {
+		for i := 0; i < len(paths); i++ {
+			key := paths[i]
+			tmp := createMap(key, content)
+			if len(prev) == 0 {
+				data = tmp
+				parent = data
+			} else {
+				parent[prev] = tmp
+				parent = tmp
+			}
+			prev = key
+		}
+	}
+	return data
+
+}
+
+func createMap(key string, content map[string]interface{}) map[string]interface{} {
+	tmp := make(map[string]interface{})
+	tmp[key] = content
+	return tmp
 }

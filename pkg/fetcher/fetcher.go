@@ -42,9 +42,11 @@ func Start() {
 
 	propertiesFile := viper.GetString("properties-file")
 	tokenHandler := TokenHandler{
-		viper.GetString("vault-addr"),
-		viper.GetString("vault-token"),
-		Properties{
+		VaultAddr: viper.GetString("vault-addr"),
+		Token: Token{
+			Path: viper.GetString("vault-token"),
+		},
+		Properties: Properties{
 			Path:   propertiesFile,
 			Format: filepath.Ext(propertiesFile),
 		}}

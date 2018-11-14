@@ -26,8 +26,8 @@ Use "vault-secret-fetcher [command] --help" for more information about a command
 | VAULT_ADDR                  |             |    Vault Address                                                |
 | VAULT_CAPATH                |             |    Vault CA                                                     |
 | VAULT_TOKEN                 |             |    Vault Agent sink file path                                   |
-| VAULT_SECRET                |             |    Vault Secret to retrieve                                     |
-| VAULT_INSECURE              |    false    |    TLS Skip                                                     |
+| VAULT_SECRET                |             |    Vault Secret to retrieve, CSV format                         |
+| VAULT_INSECURE              |    false    |    Vault TLS Skip Verify                                        |
 | VAULT_SECRET_FETCHER_CRON   | 1 * * * * * |    Cron Scheduler for the secret fetcher                        |
 | PROPERTIES_FILE             |             |    Target properties file to save the decrypted secret          |
 

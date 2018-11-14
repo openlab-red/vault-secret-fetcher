@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/fsnotify/fsnotify"
 	"github.com/robfig/cron"
+	"path/filepath"
 )
 
 var log = logrus.New()
@@ -39,19 +40,29 @@ func Start() {
 
 	validateConfig()
 
-	tokenHandler := tokenHandler{viper.GetString("vault-addr")}
+	propertiesFile := viper.GetString("properties-file")
+	tokenHandler := TokenHandler{
+		VaultAddr: viper.GetString("vault-addr"),
+		Token: Token{
+			Path: viper.GetString("vault-token"),
+		},
+		Properties: Properties{
+			Path:   propertiesFile,
+			Format: filepath.Ext(propertiesFile),
+		}}
+
 	newCron(tokenHandler)
 	newWatcher(tokenHandler)
 }
 
-func newCron(tokenHandler tokenHandler) {
+func newCron(tokenHandler TokenHandler) {
 	c := cron.New()
 	c.AddFunc(viper.GetString("vault-token-fetcher-cron"), func() { tokenHandler.readToken() })
 	c.Start()
 	tokenHandler.readToken()
 }
 
-func newWatcher(tokenHandler tokenHandler) {
+func newWatcher(tokenHandler TokenHandler) {
 	// creates a new file watcher
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {

@@ -1,3 +1,5 @@
+# DEPRECATED
+ In favour of [Vault Agent Template](https://www.vaultproject.io/docs/agent/template/)
 # Hashicorp Vault Secret Fetcher
 
 
